@@ -59,7 +59,7 @@ const deleteRecord = async (index) => {
         <th>ISBN</th>
         <th>Author(s) ID</th>
         <th>Details (not editable)</th>
-        <th width="100">
+        <th width="108">
           <Add @click="addBook" />
         </th>
       </tr>

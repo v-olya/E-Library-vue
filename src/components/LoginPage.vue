@@ -1,8 +1,8 @@
 <script setup>
   import { reactive, computed, inject } from 'vue';
-  import { passwordRegEx } from '../helpers/constants.js';//AuthSymbol,
+  import { AuthSymbol, passwordRegEx } from '../helpers/constants.js';
 
-  const user = inject('auth');
+  const user = inject(AuthSymbol);
 
   const credentials = reactive({ username: '', password: '' });
 

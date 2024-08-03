@@ -3,7 +3,7 @@
 import { ref, provide } from 'vue';
 import { useRouter, RouterView } from 'vue-router';// useRoute, 
 import { getCookies, setCookies, eraseCookies } from './helpers/functions.js';
-import { URL } from './helpers/constants.js';
+import { URL, AuthSymbol } from './helpers/constants.js';
 
 const router = useRouter();
 //const route = useRoute();
@@ -45,7 +45,7 @@ const logOut = () => {
   router.push('/login');
 };
 
-provide('auth', {token, user_id, logInAs, logOut, error});
+provide(AuthSymbol, {token, user_id, logInAs, logOut, error});
 
 </script>
 

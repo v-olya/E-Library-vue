@@ -1,9 +1,9 @@
 <script setup>
 import { inject } from 'vue';
-//import { AuthSymbol } from '../helpers/constants.js';
+import { AuthSymbol } from '../helpers/constants.js';
 import UserAvatar from './UserAvatar.vue';
 
-const { token, user_id, logOut } = inject('auth');
+const { token, user_id, logOut } = inject(AuthSymbol);
 
 </script>
 

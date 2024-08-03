@@ -50,9 +50,14 @@ export const getURL = (endpoint, order, query) => {
 };
 
 export const fetchData = async (token, url, cacheable, order, query, signal) => {
-  let [data, error] = [[], null];
+  let [data, error, loaded] = [[], null, false];
   let res = { status: 'Error' };
-  try {
+  label: try {
+    const cache = sessionStorage.getItem(url);
+    if (cacheable && cache) {
+      data = JSON.parse(cache);
+      break label;
+    }
     res = await fetch(getURL(url, order, query), {
       signal,
       headers: {
@@ -76,8 +81,10 @@ export const fetchData = async (token, url, cacheable, order, query, signal) => 
     } else {
       error = { ...err, message: `Status ${res.status}: ${err.message}` };
     }
+  } finally {
+    loaded = true;
   }
-  return {data, error};
+  return {data, error, loaded};
 };
 
 export const handleC_UDrequest = async (formType, method, id, formData) => {

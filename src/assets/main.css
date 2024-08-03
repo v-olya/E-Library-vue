@@ -167,7 +167,7 @@ h1::after {
   padding-left: 10px;
 }
 .rounded {
-  margin: 5px;
+  margin: 5px 7px;
   border-radius: 50%;
   border: none;
   background: #fff;
@@ -178,6 +178,9 @@ h1::after {
 }
 .rounded.delete:hover {
   background: #e54242;
+}
+.rounded.delete: svg{
+  padding: 1.5px;
 }
 .danger {
   font-weight: bold;

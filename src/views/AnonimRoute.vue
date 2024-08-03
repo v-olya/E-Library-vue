@@ -1,10 +1,10 @@
 <script setup>
 import { inject } from 'vue';
-//import { AuthSymbol } from '../helpers/constants.js';
+import { AuthSymbol } from '../helpers/constants.js';
 import { useRouter, RouterView } from 'vue-router';
 import ErrorBoundary from '../components/ErrorBoundary.vue';
 
-const { token } = inject('auth');
+const { token } = inject(AuthSymbol);
 const router = useRouter();
 
 if (token.value) {

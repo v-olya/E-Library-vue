@@ -1,4 +1,4 @@
-//export const AuthSymbol = Symbol();
+export const AuthSymbol = Symbol();
 export const CollectionSymbol = Symbol();
 
 export const URL = "https://library-2.sciencetrack.org";
