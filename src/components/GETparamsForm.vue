@@ -3,7 +3,7 @@ import { ref, computed, inject } from 'vue';
 import DataFetcher from './DataFetcher.vue';
 import { CollectionSymbol, titleRegEx, nameRegEx } from '../helpers/constants.js';
 
-const tableType = inject(CollectionSymbol).value.value;
+const tableType = inject(CollectionSymbol).value;
 
 const orderBy = ref('id');
 const query = ref('');

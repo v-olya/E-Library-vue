@@ -32,7 +32,7 @@ select {
   border-radius: 3px;
   padding: 1px;
 }
-[type=submit], #logout{
+[type=submit], #logout, .router-link{
   padding: 8px;
   border: none;
   border-radius: 4px;
@@ -104,6 +104,9 @@ summary {
 button:disabled, button:disabled:hover{
   background: #999
 }
+a:link, a:visited, a:hover, a:active { 
+  text-decoration: none; 
+} 
 .modal, .modal-background {
   position: absolute;
   top: 50%;
@@ -139,7 +142,7 @@ h1 {
 h1, .ok {
   color: #0d4c0b;
 }
-h1::after {
+h1:not(.not-found)::after {
   content: url("/book.svg");
   position: absolute;
   margin-left: 13px;
@@ -171,7 +174,6 @@ h1::after {
   border-radius: 50%;
   border: none;
   background: #fff;
-  box-shadow: 0 2px 3px #aaa;
 }
 .rounded.edit:hover {
   background: #85ad83;
@@ -215,6 +217,12 @@ h1::after {
   padding: 0 4px;
   border-radius: 2px;
   box-shadow: 0 2px 3px #333;
+}
+#searchButton, #login button, .rounded, .router-link {
+  box-shadow: 0 2px 3px #aaa;
+}
+.router-link a {
+  color: #fff;
 }
 [for=selectedTable] {
   width: 100%;

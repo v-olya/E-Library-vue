@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref } from 'vue';
+import { inject, ref, onUnmounted } from 'vue';
 import { computedAsync } from '@vueuse/core';
 import { fetchData } from '../helpers/functions.js';
 import CollectionA from './Collection_A.vue';
@@ -17,7 +17,7 @@ const props = defineProps({
   }
 });
 const token = inject(AuthSymbol).token?.value;
-const tableType = inject(CollectionSymbol).value.value;
+const tableType = inject(CollectionSymbol);
 
 const evaluating = ref(true);
 const result = computedAsync(async (onCancel) => {
@@ -26,9 +26,12 @@ const result = computedAsync(async (onCancel) => {
   onCancel(() => controller.abort());
 
   if (!token) {return}
-  return await fetchData(token, `${URL}/api/${tableType}/`, false, props.orderBy, props.query, signal);
+  return await fetchData(token, `${URL}/api/${tableType.value}/`, false, props.orderBy, props.query, signal);
 }, {data: [], error: null}, evaluating);
-//     v-else-if="data.length"
+
+// Clear books cache when switching collections.
+onUnmounted(()=> {sessionStorage.removeItem(`${URL}/api/books/`)});
+
 const updateData = (newData) => {
   result.value = {...result.value, data: newData};
 };
@@ -36,13 +39,13 @@ const updateData = (newData) => {
  
 <template>
   <div v-if="result.error" class="txt-c danger">
-    <h3>{{ error }}</h3>
+    <h3>{{ result.error.message ?? result.error}}</h3>
   </div>
   <div v-else-if="!evaluating && !result.data.length" class="txt-c danger"> 
     <h3>Sorry, nothing found...</h3>
   </div>
   <div v-else-if="!evaluating" class="table-wrapper">
-    <CollectionA v-if="tableType === 'authors'" :list="result.data" @update-list="updateData" />
-    <CollectionB v-if="tableType === 'books'" :list="result.data" @update-list="updateData" />
+    <CollectionA v-if="tableType === 'authors'" :list="result.data" @update-list="updateData" :key="tableType"/>
+    <CollectionB v-if="tableType === 'books'" :list="result.data" @update-list="updateData" :key="tableType"/>
   </div>
 </template>

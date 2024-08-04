@@ -1,14 +1,10 @@
 <script setup>
-import { provide, ref, computed } from 'vue';
+import { provide, ref } from 'vue';
 import { CollectionSymbol } from '../helpers/constants.js';
 import GETparamsForm from './GETparamsForm.vue';
 
 const tableType = ref('authors');
-provide(CollectionSymbol, computed(() => tableType));
-
-const switchTo= (string) => {
-  tableType.value = string;
-}
+provide(CollectionSymbol, tableType);
 
 </script>
 
@@ -20,7 +16,6 @@ const switchTo= (string) => {
         id="selectedTable"
         name="selectedTable"
         v-model.trim="tableType"
-        @change="switchTo($event.target.value)"
       >
         <option value="authors">authors</option>
         <option value="books">books</option>

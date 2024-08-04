@@ -5,12 +5,31 @@ import { useRouter, RouterView } from 'vue-router';// useRoute,
 import { getCookies, setCookies, eraseCookies } from './helpers/functions.js';
 import { URL, AuthSymbol } from './helpers/constants.js';
 
-const router = useRouter();
-//const route = useRoute();
 const [tokenInUse, currentUser] = getCookies();
 const token = ref(tokenInUse);
 const user_id = ref(+currentUser);
 const error = ref(null);
+const router = useRouter();
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!token.value) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else if (to.path ==='/login' && token.value) {
+    next({
+        path: from?.path ?? '/',
+      })
+  } else {
+    next()
+  }
+});
+
 
 const logInAs = async (data) => {
   try {

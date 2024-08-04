@@ -1,10 +1,10 @@
 <script setup>
-import { ref, inject, defineAsyncComponent, watch } from 'vue';
+import { ref, inject, defineAsyncComponent, onMounted } from 'vue';
 import Add from './actions/AddButton.vue';
 import Edit from './actions/EditButton.vue';
 import Delete from './actions/DeleteButton.vue';
 import { fetchData, handleC_UDrequest } from '../helpers/functions.js';
-import { AuthSymbol, CollectionSymbol, URL } from '../helpers/constants.js';
+import { AuthSymbol, URL } from '../helpers/constants.js';
 
 const props = defineProps({
   list: {
@@ -33,12 +33,12 @@ const AuthorForm = defineAsyncComponent(() => import('./AuthorForm.vue'));
 // Books are needed to provide details on author:  booksOf[author_id]
 const finished = ref(false);
 let tempBooksOf = {};
-const tableType = inject(CollectionSymbol);
 
-// Fetch data: 
-// when the "tableType" will be switched from Books to Authors, we need to refetch books, because the collection may be updated.
+// Fetch data
 
-watch(tableType, async ()=>{
+// When the "tableType" is switched from Books to Authors, the Collection_A will be rerendered (=the books will be refetched), because that collection may get updates.
+
+onMounted(async ()=>{
   const {data: allBooks, loaded} = await fetchData(token, `${URL}/api/books/`, true);
   if (allBooks.length) {
     allBooks.forEach((book) => {

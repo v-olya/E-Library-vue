@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import AnonimRoute from './views/AnonimRoute.vue';
 import UserRoute from './views/UserRoute.vue';
 import PageLayout from './views/PageLayout.vue';
+import NotFound from './views/NotFound.vue';
 
 const routes = [
   {
@@ -30,6 +31,7 @@ const routes = [
     ],
     meta: { requiresAuth: true },
   },
+  { path: '/:pathMatch(.*)*', component: NotFound },
 ];
 
 const router = createRouter({

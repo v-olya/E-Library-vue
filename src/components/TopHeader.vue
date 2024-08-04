@@ -3,6 +3,13 @@ import { inject } from 'vue';
 import { AuthSymbol } from '../helpers/constants.js';
 import UserAvatar from './UserAvatar.vue';
 
+defineProps({
+  without_h1: {
+    type: Boolean,
+    required: false,
+  },
+});
+
 const { token, user_id, logOut } = inject(AuthSymbol);
 
 </script>
@@ -17,6 +24,6 @@ const { token, user_id, logOut } = inject(AuthSymbol);
         <button id="logout" @click="logOut">Log out</button>
       </li>
     </ul>
-    <h1 class="txt-c">Welcome to our digital library</h1>
+    <h1 v-if="!without_h1" class="txt-c">Welcome to our digital library</h1>
   </div>
 </template>
