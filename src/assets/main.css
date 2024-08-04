@@ -96,6 +96,7 @@ details[disabled] {
 }
 details[open] {
   padding: 0.5em;
+  white-space: pre;
 }
 summary {
   margin: -0.5em -0.5em 0;
