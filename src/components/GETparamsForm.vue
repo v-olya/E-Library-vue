@@ -52,9 +52,7 @@ const handleSearch = (e) => {
         </select>
       </label>
     </form>
-<Suspense>
     <DataFetcher :orderBy="orderBy" :query="query" />
-</Suspense>
   </div>
 </template>
 

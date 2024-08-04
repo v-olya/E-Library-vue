@@ -14,7 +14,7 @@ const props = defineProps({
       typeof item.title === 'string' &&
       typeof item.isbn === 'string' &&
       !isNaN(new Date(item.publication_date)) &&
-      Array.isArray(item.authors)
+      Array.isArray(item.authors) && typeof (+item.authors.id) === 'number'
     )
   }
 });
@@ -83,7 +83,5 @@ const deleteRecord = async (index) => {
       </tr>
     </tbody>
   </table>
-  <Suspense v-if="showForm" fallback="">
-    <BookForm v-if="showForm" :index="indexToEdit" @hide-modal="() => showForm = false" :list="list" @update-list="ls=> $emit('update-list', ls)" />
-  </Suspense>
+  <BookForm v-if="showForm" :index="indexToEdit" @hide-modal="() => showForm = false" :list="list" @update-list="ls=> $emit('update-list', ls)" />
 </template>

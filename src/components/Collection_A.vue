@@ -11,7 +11,7 @@ const props = defineProps({
     type: Array,
     required: true,
     validator: value => value.every(item =>
-      typeof item.id === 'number' &&
+      typeof +item.id === 'number' &&
       typeof item.first_name === 'string' &&
       typeof item.last_name === 'string' &&
       !isNaN(new Date(item.birth_date))
@@ -113,8 +113,6 @@ const deleteRecord = async (index) => {
       </tbody>
     </table>
 
-    <Suspense v-if="showForm" fallback="">
-      <AuthorForm v-if="showForm" :index="indexToEdit" @hide-modal="() => showForm = false" :list="list" @update-list="ls=> $emit('update-list', ls)"/>
-    </Suspense>
+    <AuthorForm v-if="showForm" :index="indexToEdit" @hide-modal="() => showForm = false" :list="list" @update-list="ls=> $emit('update-list', ls)"/>
   </div>
 </template>

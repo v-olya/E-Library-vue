@@ -12,12 +12,11 @@ const {index, list} = defineProps({
     type: Array,
     required: true,
     validator: value => value.every(item => 
-      typeof item.id === 'number' &&
+      typeof +item.id === 'number' &&
       typeof item.title === 'string' &&
       typeof item.isbn === 'string' &&
-      typeof item.birth_date === 'string' &&
-      Array.isArray(item.authors) &&
-      item.authors.id && typeof (+item.authors.id) === 'number'
+      !isNaN(new Date(item.publication_date)) &&
+      Array.isArray(item.authors) && typeof (+item.authors.id) === 'number'
     )
   }
 });
