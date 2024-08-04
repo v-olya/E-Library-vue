@@ -114,7 +114,7 @@ const deleteRecord = async (index) => {
     </table>
 
     <Suspense v-if="showForm" fallback="">
-      <AuthorForm v-if="showForm" :index="indexToEdit" @hide-modal="() => showForm.value = false" :list="list" @update-list="ls=> $emit('update-list', ls)"/>
+      <AuthorForm v-if="showForm" :index="indexToEdit" @hide-modal="() => showForm = false" :list="list" @update-list="ls=> $emit('update-list', ls)"/>
     </Suspense>
   </div>
 </template>

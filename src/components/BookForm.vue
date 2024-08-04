@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { dateRegEx, titleRegEx } from '../helpers/constants.js';
 import { handleC_UDrequest } from '../helpers/functions.js';
 
-const props = defineProps({
+const {index, list} = defineProps({
   index: {
     type: Number,
     required: true
@@ -24,11 +24,12 @@ const props = defineProps({
 
 const emit = defineEmits(['hide-modal', 'update-list']);
 
-const method = computed(() => (props.index >= 0 ? "PUT" : "POST"));
-const record = computed(() => (props.index >= 0 ? props.list[props.index] : {}));
-const submitting = ref(false);
+const method = computed(() => (index >= 0 ? "PUT" : "POST"));
+const record = computed(() => (index >= 0 ? list[index] : {}));
+const submitting = ref(undefined);
 const message = ref('');
-const error = ref(false);
+const error = ref(null);
+const item = ref({});
 
 const handleSubmit = async (e) => {
   if (!confirm("Please make sure that the authors' ids exist in the DB")) {
@@ -47,32 +48,40 @@ const handleSubmit = async (e) => {
     requestBody,
   );
   if (!requestError && data) {
-    document.getElementById("hideModal").addEventListener("click", () => {
-      emit('update-list',
-        method.value === "POST"
-          ? [data, ...props.list]
-          : [...props.list.slice(0, props.index), data, ...props.list.slice(props.index + 1)],
-      );
-    });
+    item.value = data;
   }
   error.value = requestError;
   message.value = info;
 };
 
+const handleClose = ()=> {
+  emit('hide-modal');
+  if (!Object.keys(item.value).length) { return }
+  emit('update-list',
+    method.value === "POST"
+      ? [...list, item.value]
+      : [...list.slice(0, index), item.value, ...list.slice(index + 1)],
+  );
+};
+
 const author_ids = computed(() => record.value.authors
   ? record.value.authors.map(a => a.id).filter(x => x).join(",")
-  : "");
+  : ""
+);
+
 </script>
+
+
 <template>
   <div class="modal-background">
     <form id="book" name="book" class="modal" @submit.prevent="handleSubmit">
       <h3 class="txt-c">
-        {{ index >= 0 ? `Editing the book with DB id=${record.id}` : "Add a new book" }}
+        {{ index >= 0 ? `Editing the book with id = ${record.id}` : "Add a new book" }}
       </h3>
       <h4 :class="[error ? 'danger' : 'ok', 'txt-c']">
-        {{ submitting && message }}&nbsp;
+        &nbsp;<span v-if="message">{{ message }}</span>
       </h4>
-      <b id="hideModal" class="close" @click="$emit('hide-modal')">
+      <b id="hideModal" class="close" @click="handleClose">
         &#10006;
       </b>
       <div class="field">

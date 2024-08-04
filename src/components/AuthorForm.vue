@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { dateRegEx, nameRegEx } from '../helpers/constants.js';
 import { handleC_UDrequest } from '../helpers/functions.js';
 
-const props = defineProps({
+const { list, index } = defineProps({
   index: {
     type: Number,
     required: true
@@ -22,11 +22,12 @@ const props = defineProps({
 
 const emit = defineEmits(['hide-modal', 'update-list']);
 
-const method = computed(() => (props.index >= 0 ? "PUT" : "POST"));
-const record = computed(() => (props.index >= 0 ? props.list[props.index] : {}));
-const submitting = ref(false);
+const method = computed(() => (index >= 0 ? "PUT" : "POST"));
+const record = computed(() => (index >= 0 ? list[index] : {}));
+const submitting = ref(undefined);
 const message = ref('');
-const error = ref(false);
+const error = ref(null);
+const item = ref({});
 
 const handleSubmit = async (e) => {
   submitting.value = true;
@@ -38,29 +39,34 @@ const handleSubmit = async (e) => {
     new FormData(form),
   );
   if (!requestError && data) {
-    document.getElementById("hideModal").addEventListener("click", () => {
-      emit('update-list',
-        method.value === "POST"
-          ? [data, ...props.list]
-          : [...props.list.slice(0, props.index), data, ...props.list.slice(props.index + 1)],
-      );
-    });
+    item.value = data;
   }
   error.value = requestError;
   message.value = info;
-  submitting.value = false;
 };
+
+const handleClose = ()=> {
+  emit('hide-modal');
+  if (!Object.keys(item.value).length) { return }
+  emit('update-list',
+    method.value === "POST"
+      ? [...list, item.value]
+      : [...list.slice(0, index), item.value, ...list.slice(index + 1)],
+  );
+}
+
 </script>
+
 <template>
   <div class="modal-background">
     <form id="author" name="author" class="modal" @submit.prevent="handleSubmit">
       <h3 class="txt-c">
-        {{ props.index >= 0 ? `Editing the author with DB id=${record.value.id}` : "Add an author" }}
+        {{ index >= 0 ? `Editing the author with id = ${record.id}` : "Add an author" }}
       </h3>
       <h4 :class="[error ? 'danger' : 'ok', 'txt-c']">
-        {{ submitting && message }}&nbsp;
+        &nbsp;<span v-if="message">{{ message }}</span>
       </h4>
-      <b id="hideModal" class="close" @click="$emit('hide-modal')">
+      <b id="hideModal" class="close" @click="handleClose">
         &#10006;
       </b>
       <div class="field">
@@ -73,8 +79,8 @@ const handleSubmit = async (e) => {
           autoComplete="given-name"
           :pattern="nameRegEx"
           placeholder=" "
-          :defaultValue="record.value.first_name"
-          @input="() => (submitting.value = false)"
+          :defaultValue="record.first_name"
+          @input="() => submitting = false"
         />
       </div>
       <div class="field">
@@ -87,8 +93,8 @@ const handleSubmit = async (e) => {
           autoComplete="family-name"
           :pattern="nameRegEx"
           placeholder=" "
-          :defaultValue="record.value.last_name"
-          @input="() => (submitting.value = false)"
+          :defaultValue="record.last_name"
+          @input="() => submitting = false"
         />
       </div>
       <div class="field">
@@ -100,12 +106,12 @@ const handleSubmit = async (e) => {
           required
           :pattern="dateRegEx"
           placeholder="YYYY-MM-DD"
-          :defaultValue="record.value.birth_date"
-          @input="() => (submitting.value = false)"
+          :defaultValue="record.birth_date"
+          @input="() => submitting = false"
         />
-        <input type="hidden" name="ID" readonly :value="record.value.id" />
+        <input type="hidden" name="ID" readonly :value="record.id" />
       </div>
-      <button type="submit" :disabled="submitting.value">Submit</button>
+      <button type="submit" :disabled="submitting">Submit</button>
     </form>
   </div>
 </template>
