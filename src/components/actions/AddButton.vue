@@ -10,7 +10,7 @@ const props = defineProps({
 <template>
   <div class="flex align-c space-around button-wrapper">
       <span>Add&nbsp;&nbsp;</span>
-      <button class="rounded" @click="props.onClick">
+      <button class="rounded add" @click="props.onClick">
         <svg
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"

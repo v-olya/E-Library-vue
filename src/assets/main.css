@@ -175,14 +175,17 @@ h1:not(.not-found)::after {
   border: none;
   background: #fff;
 }
+.rounded.add:hover {
+  cursor: pointer;
+}
 .rounded.edit:hover {
   background: #85ad83;
 }
 .rounded.delete:hover {
   background: #e54242;
 }
-.rounded.delete: svg{
-  padding: 1.5px;
+.rounded.delete svg{
+  padding-top: 4px;
 }
 .danger {
   font-weight: bold;
